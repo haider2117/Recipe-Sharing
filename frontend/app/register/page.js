@@ -79,7 +79,7 @@ export default function RegisterPage() {
                   value={formData.name}
                   onChange={handleChange}
                   className="input-field pl-12"
-                  placeholder="John Doe"
+                  placeholder="Enter your full name"
                   required
                 />
               </div>
