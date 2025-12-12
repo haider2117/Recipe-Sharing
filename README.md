@@ -163,15 +163,83 @@ The application includes 6 pre-loaded recipes for testing:
 
 ## Production Deployment
 
-**Backend:**
-1. Set up a production database
-2. Update JWT_SECRET with a strong secret
-3. Deploy to Heroku, Railway, or similar platform
+This project uses a split deployment strategy:
+- **Frontend** → Vercel
+- **Backend** → Railway (or Render)
 
-**Frontend:**
-1. Run `npm run build` in the frontend directory
-2. Deploy to Vercel, Netlify, or similar platform
-3. Update `NEXT_PUBLIC_API_URL` to production API URL
+### Deploy Backend to Railway
+
+1. **Create Railway Account**: Visit [railway.app](https://railway.app)
+
+2. **Deploy from GitHub**:
+   ```bash
+   # Push your code to GitHub first (already done!)
+   
+   # In Railway dashboard:
+   # - Click "New Project"
+   # - Select "Deploy from GitHub repo"
+   # - Choose your repository
+   # - Select "backend" directory
+   ```
+
+3. **Set Environment Variables** in Railway:
+   ```
+   PORT=5000
+   JWT_SECRET=your_production_secret_here_make_it_strong
+   NODE_ENV=production
+   ```
+
+4. **Get your Railway URL** (e.g., `https://your-app.railway.app`)
+
+### Deploy Frontend to Vercel
+
+1. **Install Vercel CLI**:
+   ```bash
+   npm i -g vercel
+   ```
+
+2. **Deploy from frontend directory**:
+   ```bash
+   cd frontend
+   vercel
+   ```
+
+3. **Set Environment Variable** in Vercel:
+   ```
+   NEXT_PUBLIC_API_URL=https://your-railway-backend-url.railway.app/api
+   ```
+
+4. **Follow prompts**:
+   - Link to existing project? → No
+   - Project name → recipe-sharing
+   - Framework → Next.js
+   - Deploy? → Yes
+
+### Alternative: Deploy Backend to Render
+
+1. Visit [render.com](https://render.com)
+2. Create "New Web Service"
+3. Connect your GitHub repository
+4. Settings:
+   - **Root Directory**: `backend`
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+5. Add environment variables (same as Railway)
+
+### Post-Deployment
+
+1. **Update Frontend Environment**:
+   - Go to Vercel dashboard
+   - Settings → Environment Variables
+   - Add `NEXT_PUBLIC_API_URL` with your backend URL
+   - Redeploy
+
+2. **Test Your Deployment**:
+   - Visit your Vercel URL
+   - Register a new account
+   - Try creating a recipe
+
+**Note**: The backend uses in-memory storage. For production, consider adding MongoDB or PostgreSQL.
 
 ## License
 
