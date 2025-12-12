@@ -122,7 +122,7 @@ let recipes = [
     cookingTime: 45,
     difficulty: 'Medium',
     rating: 4.9,
-    image: 'https://images.unsplash.com/photo-1589301773859-98a8f5c9a3a6?w=800',
+    image: 'https://images.unsplash.com/photo-1593560704563-f176a2eb61db?w=800',
     author: 'Chef Ayesha',
     createdAt: new Date('2024-03-20')
   },
