@@ -26,20 +26,6 @@ export default function Hero() {
                 Submit a Recipe
               </Link>
             </div>
-            <div className="flex gap-8 pt-4">
-              <div>
-                <p className="text-3xl font-bold text-primary-600">500+</p>
-                <p className="text-gray-600">Recipes</p>
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-primary-600">1000+</p>
-                <p className="text-gray-600">Users</p>
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-primary-600">50+</p>
-                <p className="text-gray-600">Categories</p>
-              </div>
-            </div>
           </div>
 
           {/* Hero Image */}
