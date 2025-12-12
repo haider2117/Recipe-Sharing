@@ -2,9 +2,21 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { FaPlus, FaTrash } from 'react-icons/fa'
 import { createRecipe } from '@/lib/api'
 import { useAuth } from '@/context/AuthContext'
+
+// Minimal icons
+const PlusIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 5v14M5 12h14"/>
+  </svg>
+)
+
+const TrashIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+  </svg>
+)
 
 export default function SubmitRecipePage() {
   const router = useRouter()
@@ -71,7 +83,6 @@ export default function SubmitRecipePage() {
     e.preventDefault()
     setError('')
 
-    // Validation
     const validIngredients = ingredients.filter(ing => ing.trim() !== '')
     const validInstructions = instructions.filter(inst => inst.trim() !== '')
 
@@ -106,10 +117,8 @@ export default function SubmitRecipePage() {
 
   if (authLoading) {
     return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex justify-center items-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-500"></div>
-        </div>
+      <div className="min-h-screen bg-apple-bg-secondary dark:bg-apple-darkBg-primary flex items-center justify-center pt-14">
+        <div className="loading-spinner w-10 h-10" />
       </div>
     )
   }
@@ -119,25 +128,30 @@ export default function SubmitRecipePage() {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen py-12">
-      <div className="container mx-auto px-4 max-w-4xl">
-        <div className="text-center mb-12">
-          <h1 className="section-title">Submit Your Recipe</h1>
-          <p className="section-subtitle">Share your culinary creation with the community</p>
+    <div className="min-h-screen bg-apple-bg-secondary dark:bg-apple-darkBg-primary pt-14">
+      <div className="container-apple py-12 md:py-16">
+        {/* Header */}
+        <div className="text-center mb-10 md:mb-12">
+          <h1 className="section-title">Submit your recipe</h1>
+          <p className="section-subtitle mx-auto">
+            Share your culinary creation with the community
+          </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-lg p-8">
+        {/* Form Card */}
+        <div className="card p-6 md:p-10 max-w-3xl mx-auto animate-fade-up">
+          {/* Error Message */}
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
-              {error}
+            <div className="mb-6 p-4 rounded-apple-lg bg-apple-red/10 border border-apple-red/20">
+              <p className="text-body-small text-apple-red">{error}</p>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-8">
             {/* Title */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Recipe Title *
+              <label className="block text-body-small font-medium text-apple-text-primary dark:text-apple-darkText-primary mb-2">
+                Recipe Title
               </label>
               <input
                 type="text"
@@ -152,14 +166,14 @@ export default function SubmitRecipePage() {
 
             {/* Description */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Description *
+              <label className="block text-body-small font-medium text-apple-text-primary dark:text-apple-darkText-primary mb-2">
+                Description
               </label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
-                className="input-field"
+                className="input-field resize-none"
                 rows="3"
                 placeholder="Brief description of your recipe"
                 required
@@ -167,16 +181,16 @@ export default function SubmitRecipePage() {
             </div>
 
             {/* Category, Time, Difficulty */}
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-5">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Category *
+                <label className="block text-body-small font-medium text-apple-text-primary dark:text-apple-darkText-primary mb-2">
+                  Category
                 </label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
-                  className="input-field"
+                  className="select-field"
                   required
                 >
                   <option value="Breakfast">Breakfast</option>
@@ -189,8 +203,8 @@ export default function SubmitRecipePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Cooking Time (mins) *
+                <label className="block text-body-small font-medium text-apple-text-primary dark:text-apple-darkText-primary mb-2">
+                  Cooking Time (min)
                 </label>
                 <input
                   type="number"
@@ -205,14 +219,14 @@ export default function SubmitRecipePage() {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Difficulty *
+                <label className="block text-body-small font-medium text-apple-text-primary dark:text-apple-darkText-primary mb-2">
+                  Difficulty
                 </label>
                 <select
                   name="difficulty"
                   value={formData.difficulty}
                   onChange={handleInputChange}
-                  className="input-field"
+                  className="select-field"
                   required
                 >
                   <option value="Easy">Easy</option>
@@ -224,8 +238,8 @@ export default function SubmitRecipePage() {
 
             {/* Image URL */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Image URL (optional)
+              <label className="block text-body-small font-medium text-apple-text-primary dark:text-apple-darkText-primary mb-2">
+                Image URL <span className="text-apple-text-tertiary font-normal">(optional)</span>
               </label>
               <input
                 type="url"
@@ -239,16 +253,17 @@ export default function SubmitRecipePage() {
 
             {/* Ingredients */}
             <div>
-              <div className="flex items-center justify-between mb-3">
-                <label className="block text-sm font-semibold text-gray-700">
-                  Ingredients *
+              <div className="flex items-center justify-between mb-4">
+                <label className="text-body-small font-medium text-apple-text-primary dark:text-apple-darkText-primary">
+                  Ingredients
                 </label>
                 <button
                   type="button"
                   onClick={addIngredient}
-                  className="flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold"
+                  className="flex items-center gap-1.5 text-apple-blue hover:text-apple-blue-hover 
+                             text-body-small font-medium transition-colors"
                 >
-                  <FaPlus /> Add Ingredient
+                  <PlusIcon /> Add
                 </button>
               </div>
               <div className="space-y-3">
@@ -258,16 +273,17 @@ export default function SubmitRecipePage() {
                       type="text"
                       value={ingredient}
                       onChange={(e) => handleIngredientChange(index, e.target.value)}
-                      className="input-field"
+                      className="input-field flex-1"
                       placeholder={`Ingredient ${index + 1}`}
                     />
                     {ingredients.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removeIngredient(index)}
-                        className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-3 text-apple-text-tertiary hover:text-apple-red 
+                                   hover:bg-apple-red/5 rounded-apple transition-colors"
                       >
-                        <FaTrash />
+                        <TrashIcon />
                       </button>
                     )}
                   </div>
@@ -277,28 +293,30 @@ export default function SubmitRecipePage() {
 
             {/* Instructions */}
             <div>
-              <div className="flex items-center justify-between mb-3">
-                <label className="block text-sm font-semibold text-gray-700">
-                  Instructions *
+              <div className="flex items-center justify-between mb-4">
+                <label className="text-body-small font-medium text-apple-text-primary dark:text-apple-darkText-primary">
+                  Instructions
                 </label>
                 <button
                   type="button"
                   onClick={addInstruction}
-                  className="flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold"
+                  className="flex items-center gap-1.5 text-apple-blue hover:text-apple-blue-hover 
+                             text-body-small font-medium transition-colors"
                 >
-                  <FaPlus /> Add Step
+                  <PlusIcon /> Add Step
                 </button>
               </div>
               <div className="space-y-3">
                 {instructions.map((instruction, index) => (
-                  <div key={index} className="flex gap-2">
-                    <span className="px-3 py-2 bg-primary-100 text-primary-700 font-bold rounded-lg">
+                  <div key={index} className="flex gap-3">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-apple-blue text-white 
+                                    text-body-small font-semibold flex items-center justify-center mt-2">
                       {index + 1}
-                    </span>
+                    </div>
                     <textarea
                       value={instruction}
                       onChange={(e) => handleInstructionChange(index, e.target.value)}
-                      className="input-field"
+                      className="input-field flex-1 resize-none"
                       rows="2"
                       placeholder={`Step ${index + 1}`}
                     />
@@ -306,9 +324,10 @@ export default function SubmitRecipePage() {
                       <button
                         type="button"
                         onClick={() => removeInstruction(index)}
-                        className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        className="p-3 text-apple-text-tertiary hover:text-apple-red 
+                                   hover:bg-apple-red/5 rounded-apple transition-colors mt-2"
                       >
-                        <FaTrash />
+                        <TrashIcon />
                       </button>
                     )}
                   </div>
@@ -317,13 +336,20 @@ export default function SubmitRecipePage() {
             </div>
 
             {/* Submit Button */}
-            <div className="pt-6 border-t border-gray-200">
+            <div className="pt-6 border-t border-apple-gray-100 dark:border-apple-gray-800">
               <button
                 type="submit"
                 disabled={loading}
-                className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-primary w-full"
               >
-                {loading ? 'Submitting...' : 'Submit Recipe'}
+                {loading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="loading-spinner w-4 h-4 border-white/30 border-t-white" />
+                    Submitting...
+                  </span>
+                ) : (
+                  'Submit Recipe'
+                )}
               </button>
             </div>
           </form>

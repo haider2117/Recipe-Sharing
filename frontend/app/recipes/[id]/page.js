@@ -3,9 +3,47 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { FaClock, FaUtensils, FaStar, FaArrowLeft, FaTrash } from 'react-icons/fa'
 import { getRecipeById, deleteRecipe } from '@/lib/api'
 import { useAuth } from '@/context/AuthContext'
+
+// Minimal icons
+const ArrowLeftIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M19 12H5M12 19l-7-7 7-7"/>
+  </svg>
+)
+
+const ClockIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <polyline points="12 6 12 12 16 14"/>
+  </svg>
+)
+
+const ChefIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/>
+    <line x1="6" y1="17" x2="18" y2="17"/>
+  </svg>
+)
+
+const StarIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+  </svg>
+)
+
+const TrashIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+  </svg>
+)
+
+const CheckIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </svg>
+)
 
 export default function RecipeDetailPage() {
   const params = useParams()
@@ -46,21 +84,23 @@ export default function RecipeDetailPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex justify-center items-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-500"></div>
-        </div>
+      <div className="min-h-screen bg-apple-bg-secondary dark:bg-apple-darkBg-primary flex items-center justify-center pt-14">
+        <div className="loading-spinner w-10 h-10" />
       </div>
     )
   }
 
   if (!recipe) {
     return (
-      <div className="container mx-auto px-4 py-12 text-center">
-        <h2 className="text-2xl font-bold mb-4">Recipe not found</h2>
-        <button onClick={() => router.push('/recipes')} className="btn-primary">
-          Browse Recipes
-        </button>
+      <div className="min-h-screen bg-apple-bg-secondary dark:bg-apple-darkBg-primary flex items-center justify-center pt-14">
+        <div className="text-center">
+          <h2 className="text-title-3 font-semibold text-apple-text-primary dark:text-apple-darkText-primary mb-4">
+            Recipe not found
+          </h2>
+          <button onClick={() => router.push('/recipes')} className="btn-primary">
+            Browse Recipes
+          </button>
+        </div>
       </div>
     )
   }
@@ -68,111 +108,138 @@ export default function RecipeDetailPage() {
   const canDelete = user && recipe.userId && user.id === recipe.userId
 
   return (
-    <div className="bg-gray-50 min-h-screen py-8">
-      <div className="container mx-auto px-4 max-w-5xl">
+    <div className="min-h-screen bg-apple-bg-secondary dark:bg-apple-darkBg-primary pt-14">
+      <div className="container-apple py-8 md:py-12">
         {/* Back Button */}
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-primary-600 hover:text-primary-700 mb-6 font-semibold"
+          className="inline-flex items-center gap-2 text-apple-blue hover:text-apple-blue-hover 
+                     text-body-small font-medium mb-8 transition-colors"
         >
-          <FaArrowLeft /> Back
+          <ArrowLeftIcon /> Back
         </button>
 
-        {/* Recipe Header */}
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
-          <div className="relative h-[400px] w-full">
+        {/* Recipe Hero */}
+        <article className="animate-fade-up">
+          {/* Image */}
+          <div className="relative aspect-[21/9] rounded-apple-2xl overflow-hidden shadow-apple-lg mb-8">
             <Image
               src={recipe.image}
               alt={recipe.title}
               fill
               className="object-cover"
+              priority
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
           </div>
 
-          <div className="p-8">
-            <div className="flex justify-between items-start mb-4">
+          {/* Header Card */}
+          <div className="card p-6 md:p-8 mb-8">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
               <div className="flex-1">
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="px-4 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold">
-                    {recipe.category}
-                  </span>
-                  <span className="px-4 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm font-semibold">
-                    {recipe.difficulty}
-                  </span>
+                {/* Badges */}
+                <div className="flex flex-wrap items-center gap-2 mb-4">
+                  <span className="badge badge-accent">{recipe.category}</span>
+                  <span className="badge">{recipe.difficulty}</span>
                 </div>
-                <h1 className="text-4xl font-bold text-gray-900 mb-2">{recipe.title}</h1>
-                <p className="text-lg text-gray-600 mb-4">{recipe.description}</p>
-                <p className="text-sm text-gray-500">By {recipe.author}</p>
+                
+                {/* Title */}
+                <h1 className="text-title-2 md:text-title-1 font-semibold text-apple-text-primary dark:text-apple-darkText-primary tracking-tight mb-3">
+                  {recipe.title}
+                </h1>
+                
+                {/* Description */}
+                <p className="text-body-large text-apple-text-secondary dark:text-apple-darkText-secondary mb-4">
+                  {recipe.description}
+                </p>
+                
+                {/* Author */}
+                <p className="text-body-small text-apple-text-tertiary dark:text-apple-darkText-tertiary">
+                  by <span className="text-apple-text-secondary dark:text-apple-darkText-secondary font-medium">{recipe.author}</span>
+                </p>
               </div>
               
               {canDelete && (
                 <button
                   onClick={handleDelete}
-                  className="ml-4 p-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="self-start p-3 text-apple-text-tertiary hover:text-apple-red 
+                             hover:bg-apple-red/5 rounded-apple transition-colors"
                   title="Delete Recipe"
                 >
-                  <FaTrash size={20} />
+                  <TrashIcon />
                 </button>
               )}
             </div>
 
-            {/* Recipe Meta */}
-            <div className="flex flex-wrap gap-6 mt-6 pt-6 border-t border-gray-200">
-              <div className="flex items-center gap-2">
-                <FaClock className="text-primary-500" size={20} />
-                <span className="font-semibold">{recipe.cookingTime} mins</span>
+            {/* Meta Info */}
+            <div className="flex flex-wrap gap-6 mt-6 pt-6 border-t border-apple-gray-100 dark:border-apple-gray-800">
+              <div className="flex items-center gap-2 text-apple-text-secondary dark:text-apple-darkText-secondary">
+                <ClockIcon />
+                <span className="text-body font-medium">{recipe.cookingTime} min</span>
+              </div>
+              <div className="flex items-center gap-2 text-apple-text-secondary dark:text-apple-darkText-secondary">
+                <ChefIcon />
+                <span className="text-body font-medium">{recipe.difficulty}</span>
               </div>
               <div className="flex items-center gap-2">
-                <FaUtensils className="text-primary-500" size={20} />
-                <span className="font-semibold">{recipe.difficulty}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <FaStar className="text-yellow-400" size={20} />
-                <span className="font-semibold">{recipe.rating || 0} / 5</span>
+                <span className="text-apple-orange"><StarIcon /></span>
+                <span className="text-body font-medium text-apple-text-secondary dark:text-apple-darkText-secondary">
+                  {recipe.rating || '—'} / 5
+                </span>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Ingredients and Instructions */}
-        <div className="grid md:grid-cols-5 gap-8">
-          {/* Ingredients */}
-          <div className="md:col-span-2">
-            <div className="bg-white rounded-2xl shadow-lg p-8 sticky top-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <FaUtensils className="text-primary-500" />
-                Ingredients
-              </h2>
-              <ul className="space-y-3">
-                {recipe.ingredients.map((ingredient, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <span className="w-2 h-2 bg-primary-500 rounded-full mt-2 flex-shrink-0"></span>
-                    <span className="text-gray-700">{ingredient}</span>
-                  </li>
-                ))}
-              </ul>
+          {/* Content Grid */}
+          <div className="grid md:grid-cols-5 gap-6 md:gap-8">
+            {/* Ingredients - Sidebar */}
+            <div className="md:col-span-2">
+              <div className="card p-6 md:p-8 sticky top-20">
+                <h2 className="text-title-4 font-semibold text-apple-text-primary dark:text-apple-darkText-primary mb-6 flex items-center gap-2">
+                  <ChefIcon />
+                  Ingredients
+                </h2>
+                <ul className="space-y-3">
+                  {recipe.ingredients.map((ingredient, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full border border-apple-gray-300 dark:border-apple-gray-600 
+                                       flex items-center justify-center mt-0.5">
+                        <span className="w-2 h-2 rounded-full bg-apple-blue" />
+                      </span>
+                      <span className="text-body text-apple-text-primary dark:text-apple-darkText-primary">
+                        {ingredient}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
 
-          {/* Instructions */}
-          <div className="md:col-span-3">
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Instructions</h2>
-              <div className="space-y-6">
-                {recipe.instructions.map((instruction, index) => (
-                  <div key={index} className="flex gap-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-primary-500 text-white rounded-full flex items-center justify-center font-bold">
-                        {index + 1}
+            {/* Instructions - Main */}
+            <div className="md:col-span-3">
+              <div className="card p-6 md:p-8">
+                <h2 className="text-title-4 font-semibold text-apple-text-primary dark:text-apple-darkText-primary mb-6">
+                  Instructions
+                </h2>
+                <div className="space-y-6">
+                  {recipe.instructions.map((instruction, index) => (
+                    <div key={index} className="flex gap-4">
+                      <div className="flex-shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-apple-blue text-white 
+                                        text-body-small font-semibold flex items-center justify-center">
+                          {index + 1}
+                        </div>
                       </div>
+                      <p className="text-body text-apple-text-primary dark:text-apple-darkText-primary pt-1 leading-relaxed">
+                        {instruction}
+                      </p>
                     </div>
-                    <p className="text-gray-700 pt-1">{instruction}</p>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </article>
       </div>
     </div>
   )
