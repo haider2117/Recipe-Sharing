@@ -76,8 +76,8 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-800 pt-8 text-center">
-          <p className="text-gray-400 flex items-center justify-center gap-2">
-            Made with <FaHeart className="text-red-500" /> by RecipeShare Team © 2024
+          <p className="text-gray-400">
+            © 2024 RecipeShare. All rights reserved.
           </p>
         </div>
       </div>

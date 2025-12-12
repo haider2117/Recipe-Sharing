@@ -1,3 +1,5 @@
+import { FaClock, FaTag } from 'react-icons/fa'
+
 export default function RecipeFilters({ filters, onFilterChange }) {
   const categories = ['All', 'Breakfast', 'Lunch', 'Dinner', 'Desserts', 'Vegan', 'Snacks']
   const timeFilters = [
@@ -8,22 +10,27 @@ export default function RecipeFilters({ filters, onFilterChange }) {
   ]
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-      <div className="grid md:grid-cols-2 gap-6">
+    <div className="bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg border border-gray-100 p-8 mb-10">
+      <div className="grid md:grid-cols-2 gap-8">
         {/* Category Filter */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">
-            Category
-          </label>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="bg-primary-100 p-2 rounded-lg">
+              <FaTag className="text-primary-600 text-lg" />
+            </div>
+            <label className="text-lg font-bold text-gray-800">
+              Category
+            </label>
+          </div>
+          <div className="flex flex-wrap gap-3">
             {categories.map((category) => (
               <button
                 key={category}
                 onClick={() => onFilterChange({ category })}
-                className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                className={`px-5 py-2.5 rounded-xl font-semibold transition-all transform hover:scale-105 ${
                   filters.category === category
-                    ? 'bg-primary-500 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-200'
+                    : 'bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-200 hover:border-primary-300'
                 }`}
               >
                 {category}
@@ -34,18 +41,23 @@ export default function RecipeFilters({ filters, onFilterChange }) {
 
         {/* Time Filter */}
         <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-3">
-            Cooking Time
-          </label>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="bg-primary-100 p-2 rounded-lg">
+              <FaClock className="text-primary-600 text-lg" />
+            </div>
+            <label className="text-lg font-bold text-gray-800">
+              Cooking Time
+            </label>
+          </div>
+          <div className="flex flex-wrap gap-3">
             {timeFilters.map((timeFilter) => (
               <button
                 key={timeFilter.label}
                 onClick={() => onFilterChange({ maxTime: timeFilter.value })}
-                className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                className={`px-5 py-2.5 rounded-xl font-semibold transition-all transform hover:scale-105 ${
                   filters.maxTime === timeFilter.value
-                    ? 'bg-primary-500 text-white shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'bg-gradient-to-r from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-200'
+                    : 'bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-200 hover:border-primary-300'
                 }`}
               >
                 {timeFilter.label}
